@@ -6,24 +6,24 @@ import PageTransition from '@/components/PageTransition';
 export default function ContactPage() {
   return (
     <PageTransition>
-      <div className="min-h-screen pt-32 pb-20 px-6">
+      <div className="min-h-screen pt-24 md:pt-32 pb-12 md:pb-20 px-4 md:px-6">
         <div className="container mx-auto max-w-6xl">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="mb-32"
+            className="mb-16 md:mb-32"
           >
-            <h1 className="text-7xl md:text-9xl font-bold mb-8">CONTACT</h1>
-            <div className="h-px w-20 bg-white mb-12"></div>
-            <p className="text-2xl text-white/60 max-w-2xl">
+            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-9xl font-bold mb-6 md:mb-8">CONTACT</h1>
+            <div className="h-px w-16 md:w-20 bg-white mb-8 md:mb-12"></div>
+            <p className="text-lg md:text-xl lg:text-2xl text-white/60 max-w-2xl">
               Available for freelance projects and collaborations
             </p>
           </motion.div>
 
           {/* Contact Grid */}
-          <div className="grid md:grid-cols-2 gap-20">
+          <div className="grid md:grid-cols-2 gap-12 md:gap-20">
             {/* Left - Contact Info */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
@@ -32,14 +32,14 @@ export default function ContactPage() {
               className="space-y-12"
             >
               <div>
-                <h2 className="text-4xl font-bold mb-8">Get in Touch</h2>
-                <div className="space-y-6">
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 md:mb-8">Get in Touch</h2>
+                <div className="space-y-4 md:space-y-6">
                   <a
                     href="mailto:pratyushkv3@gmail.com"
                     className="block group"
                   >
-                    <div className="text-white/40 text-sm uppercase tracking-wider mb-2">Email</div>
-                    <div className="text-2xl hover:text-white/80 transition-colors">
+                    <div className="text-white/40 text-xs md:text-sm uppercase tracking-wider mb-2">Email</div>
+                    <div className="text-lg md:text-xl lg:text-2xl hover:text-white/80 transition-colors break-all">
                       pratyushkv3@gmail.com
                     </div>
                   </a>

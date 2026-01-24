@@ -12,14 +12,14 @@ export default function TechBurnerPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen pt-32 pb-20 px-6">
+      <div className="min-h-screen pt-24 md:pt-32 pb-12 md:pb-20 px-4 md:px-6">
         <div className="container mx-auto">
           {/* Client header */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="glass-card p-12 rounded-2xl mb-16 relative overflow-hidden"
+            className="glass-card p-6 md:p-10 lg:p-12 rounded-xl md:rounded-2xl mb-12 md:mb-16 relative overflow-hidden"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-accent-purple/10 to-accent-blue/10" />
             <div className="relative z-10">
@@ -35,10 +35,10 @@ export default function TechBurnerPage() {
                   ← Back to Work
                 </Link>
               </motion.div>
-              <h1 className="text-5xl md:text-6xl font-bold mb-4">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-4">
                 <span className="text-gradient">Tech Burner</span>
               </h1>
-              <p className="text-white/70 text-xl max-w-3xl">
+              <p className="text-white/70 text-sm sm:text-base md:text-lg lg:text-xl max-w-3xl">
                 Creating high-energy, attention-grabbing tech content that stops the scroll.
                 Specializing in fast-paced product reviews, unboxings, and tech comparisons.
               </p>
@@ -46,7 +46,7 @@ export default function TechBurnerPage() {
           </motion.div>
 
           {/* Project focus */}
-          <div className="grid md:grid-cols-3 gap-6 mb-16">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 mb-12 md:mb-16">
             {[
               {
                 label: 'Content Type',
@@ -76,7 +76,7 @@ export default function TechBurnerPage() {
 
           {/* Projects grid */}
           <SectionHeader title="Projects" subtitle="Latest work for Tech Burner" />
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
             {techBurnerProjects.map((project, index) => (
               <VideoCard
                 key={project.id}

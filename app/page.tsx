@@ -22,20 +22,20 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
           >
-            <h1 className="text-7xl md:text-[10rem] font-bold leading-none mb-8 tracking-tight">
+            <h1 className="text-5xl sm:text-6xl md:text-8xl lg:text-[10rem] font-bold leading-none mb-6 md:mb-8 tracking-tight">
               PRATYUSH
             </h1>
-            <div className="h-px w-32 bg-white mx-auto mb-8"></div>
-            <div className="flex items-center justify-center gap-4 mb-4 flex-wrap">
-              <p className="text-xl md:text-2xl tracking-[0.3em] uppercase">
+            <div className="h-px w-20 md:w-32 bg-white mx-auto mb-6 md:mb-8"></div>
+            <div className="flex items-center justify-center gap-3 md:gap-4 mb-4 flex-wrap px-4">
+              <p className="text-base sm:text-lg md:text-xl lg:text-2xl tracking-[0.2em] md:tracking-[0.3em] uppercase">
                 Video Editor
               </p>
               <span className="text-white/30">×</span>
-              <p className="text-xl md:text-2xl tracking-[0.3em] uppercase">
+              <p className="text-base sm:text-lg md:text-xl lg:text-2xl tracking-[0.2em] md:tracking-[0.3em] uppercase">
                 Photographer
               </p>
             </div>
-            <p className="text-white/60 text-lg md:text-xl tracking-wide mb-16 max-w-3xl mx-auto">
+            <p className="text-white/60 text-sm sm:text-base md:text-lg lg:text-xl tracking-wide mb-12 md:mb-16 max-w-3xl mx-auto px-4">
               Crafting compelling visual stories through motion & stillness
             </p>
           </motion.div>
@@ -44,31 +44,31 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.5 }}
-            className="flex flex-col md:flex-row gap-6 justify-center"
+            className="flex flex-col md:flex-row gap-4 md:gap-6 justify-center px-4 max-w-xl md:max-w-none mx-auto"
           >
-            <Link href="/video-editing">
+            <Link href="/video-editing" className="w-full md:w-auto">
               <motion.button
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-10 py-4 bg-white text-black font-semibold text-lg tracking-wide uppercase w-full md:w-auto hover:bg-white/90 transition-colors"
+                className="w-full px-8 md:px-10 py-3 md:py-4 bg-white text-black font-semibold text-sm md:text-lg tracking-wide uppercase hover:bg-white/90 transition-colors"
               >
                 Video Editing
               </motion.button>
             </Link>
-            <Link href="/photography">
+            <Link href="/photography" className="w-full md:w-auto">
               <motion.button
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-10 py-4 border-2 border-white text-white font-semibold text-lg tracking-wide uppercase w-full md:w-auto hover:bg-white hover:text-black transition-all"
+                className="w-full px-8 md:px-10 py-3 md:py-4 border-2 border-white text-white font-semibold text-sm md:text-lg tracking-wide uppercase hover:bg-white hover:text-black transition-all"
               >
                 Photography
               </motion.button>
             </Link>
-            <Link href="/contact">
+            <Link href="/contact" className="w-full md:w-auto">
               <motion.button
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-10 py-4 border-2 border-white/40 text-white/80 font-semibold text-lg tracking-wide uppercase w-full md:w-auto hover:border-white hover:text-white transition-all"
+                className="w-full px-8 md:px-10 py-3 md:py-4 border-2 border-white/40 text-white/80 font-semibold text-sm md:text-lg tracking-wide uppercase hover:border-white hover:text-white transition-all"
               >
                 Contact
               </motion.button>
@@ -93,20 +93,20 @@ export default function Home() {
       </motion.section>
 
       {/* Dual Showcase Section */}
-      <section className="py-32 px-6">
+      <section className="py-16 md:py-24 lg:py-32 px-4 md:px-6">
         <div className="container mx-auto max-w-7xl">
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="mb-20"
+            className="mb-12 md:mb-20"
           >
-            <h2 className="text-5xl md:text-7xl font-bold mb-8">What I Create</h2>
-            <div className="h-px w-20 bg-white"></div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-6 md:mb-8">What I Create</h2>
+            <div className="h-px w-16 md:w-20 bg-white"></div>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-12">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -115,7 +115,7 @@ export default function Home() {
             >
               <Link href="/video-editing">
                 <div className="group cursor-pointer">
-                  <div className="relative aspect-[4/5] bg-zinc-900 mb-6 overflow-hidden border border-white/10">
+                  <div className="relative aspect-[4/5] bg-zinc-900 mb-4 md:mb-6 overflow-hidden border border-white/10">
                     <Image
                       src="/showcase/video-editing.jpg"
                       alt="Video Editing Showcase"
@@ -128,16 +128,16 @@ export default function Home() {
                       whileHover={{ opacity: 1 }}
                       className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-500"
                     >
-                      <div className="text-white/90 text-6xl font-bold tracking-wider">EDIT</div>
+                      <div className="text-white/90 text-3xl md:text-5xl lg:text-6xl font-bold tracking-wider">EDIT</div>
                     </motion.div>
                   </div>
-                  <h3 className="text-4xl font-bold mb-3 group-hover:text-white/80 transition-colors">
+                  <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 md:mb-3 group-hover:text-white/80 transition-colors">
                     Video Editing
                   </h3>
-                  <p className="text-white/60 mb-6 text-lg">
+                  <p className="text-white/60 mb-4 md:mb-6 text-sm md:text-base lg:text-lg">
                     High-energy content for Tech Burner, Open Letter & more. Millions of views, maximum retention.
                   </p>
-                  <div className="text-white/40 uppercase tracking-wide text-sm flex items-center gap-2">
+                  <div className="text-white/40 uppercase tracking-wide text-xs md:text-sm flex items-center gap-2">
                     View Work 
                     <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -155,7 +155,7 @@ export default function Home() {
             >
               <Link href="/photography">
                 <div className="group cursor-pointer">
-                  <div className="relative aspect-[4/5] bg-zinc-900 mb-6 overflow-hidden border border-white/10">
+                  <div className="relative aspect-[4/5] bg-zinc-900 mb-4 md:mb-6 overflow-hidden border border-white/10">
                     <Image
                       src="/showcase/photography.jpg"
                       alt="Photography Showcase"
@@ -168,16 +168,16 @@ export default function Home() {
                       whileHover={{ opacity: 1 }}
                       className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-500"
                     >
-                      <div className="text-white/90 text-6xl font-bold tracking-wider">CAPTURE</div>
+                      <div className="text-white/90 text-3xl md:text-5xl lg:text-6xl font-bold tracking-wider">CAPTURE</div>
                     </motion.div>
                   </div>
-                  <h3 className="text-4xl font-bold mb-3 group-hover:text-white/80 transition-colors">
+                  <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 md:mb-3 group-hover:text-white/80 transition-colors">
                     Photography
                   </h3>
-                  <p className="text-white/60 mb-6 text-lg">
+                  <p className="text-white/60 mb-4 md:mb-6 text-sm md:text-base lg:text-lg">
                     Capturing moments that tell stories. From portraits to products, every frame matters.
                   </p>
-                  <div className="text-white/40 uppercase tracking-wide text-sm flex items-center gap-2">
+                  <div className="text-white/40 uppercase tracking-wide text-xs md:text-sm flex items-center gap-2">
                     View Gallery
                     <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -191,9 +191,9 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-32 px-6 bg-white/5">
+      <section className="py-16 md:py-24 lg:py-32 px-4 md:px-6 bg-white/5">
         <div className="container mx-auto max-w-6xl">
-          <div className="grid grid-cols-3 gap-16">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 md:gap-12 lg:gap-16">
             {[
               { number: '6+', label: 'Years Experience' },
               { number: '500+', label: 'Videos Edited' },
@@ -207,8 +207,8 @@ export default function Home() {
                 transition={{ duration: 0.8, delay: index * 0.1 }}
                 className="text-center"
               >
-                <div className="text-6xl md:text-8xl font-bold mb-4">{stat.number}</div>
-                <div className="text-white/60 tracking-wide uppercase text-sm">
+                <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-3 md:mb-4">{stat.number}</div>
+                <div className="text-white/60 tracking-wide uppercase text-xs sm:text-sm md:text-base">
                   {stat.label}
                 </div>
               </motion.div>

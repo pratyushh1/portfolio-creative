@@ -120,9 +120,9 @@ export default function PhotographyPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="mb-6"
+              className="mb-4 md:mb-6"
             >
-              <span className="text-white/60 tracking-[0.3em] text-sm uppercase">
+              <span className="text-white/60 tracking-[0.2em] md:tracking-[0.3em] text-xs md:text-sm uppercase">
                 Photography
               </span>
             </motion.div>
@@ -131,7 +131,7 @@ export default function PhotographyPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-7xl md:text-9xl font-bold tracking-tight mb-6"
+              className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-tight mb-4 md:mb-6"
             >
               FROZEN
               <br />
@@ -142,19 +142,19 @@ export default function PhotographyPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-xl md:text-2xl text-white/70 max-w-2xl mx-auto"
+              className="text-sm sm:text-base md:text-xl lg:text-2xl text-white/70 max-w-2xl mx-auto px-4"
             >
               Moments frozen better than your phone camera ever could.
-              <br />
+              <br className="hidden sm:block" />
               Scroll through, connect with what moves you, and let's create magic together.
             </motion.p>
           </div>
         </motion.section>
 
         {/* Photo Grid */}
-        <section className="py-20 px-6">
+        <section className="py-12 md:py-16 lg:py-20 px-4 md:px-6">
           <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
               {filteredPhotos.map((photo, index) => (
                 <motion.button
                   key={photo.id}
@@ -189,15 +189,15 @@ export default function PhotographyPage() {
         </section>
 
         {/* Photography Approach Section */}
-        <section className="py-32 px-6 bg-white/5">
+        <section className="py-16 md:py-24 lg:py-32 px-4 md:px-6 bg-white/5">
           <div className="max-w-6xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-center mb-16"
+              className="text-center mb-12 md:mb-16"
             >
-              <h2 className="text-5xl font-bold mb-6">Photography Approach</h2>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6">Photography Approach</h2>
               <p className="text-xl text-white/70 max-w-2xl mx-auto">
                 Every shot is crafted with intention, light, and storytelling
               </p>

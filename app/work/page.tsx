@@ -17,24 +17,24 @@ export default function WorkPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen pt-32 pb-20">
+      <div className="min-h-screen pt-24 md:pt-32 pb-12 md:pb-20">
         {/* Page Header */}
-        <div className="container mx-auto px-6 mb-20">
+        <div className="container mx-auto px-4 md:px-6 mb-12 md:mb-20">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-7xl md:text-9xl font-bold mb-8">WORK</h1>
-            <div className="h-px w-20 bg-white mb-8"></div>
-            <p className="text-xl text-white/60 max-w-2xl">
+            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-9xl font-bold mb-6 md:mb-8">WORK</h1>
+            <div className="h-px w-16 md:w-20 bg-white mb-6 md:mb-8"></div>
+            <p className="text-base md:text-xl text-white/60 max-w-2xl">
               A selection of projects for leading creators and brands
             </p>
           </motion.div>
         </div>
 
-        {/* Horizontal Scroll Section */}
-        <div ref={scrollRef} className="h-[200vh] relative">
+        {/* Horizontal Scroll Section - Desktop Only */}
+        <div ref={scrollRef} className="hidden md:block h-[200vh] relative">
           <div className="sticky top-0 h-screen flex items-center overflow-hidden">
             <motion.div
               style={{ x }}
@@ -85,8 +85,48 @@ export default function WorkPage() {
           </div>
         </div>
 
+        {/* Mobile Grid */}
+        <div className="md:hidden container mx-auto px-4 mb-16">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {projects.slice(0, 10).map((project, index) => (
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+              >
+                <a
+                  href={project.videoUrl || project.driveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group block"
+                >
+                  <div className="relative aspect-[9/16] bg-zinc-900 mb-3 overflow-hidden rounded-lg">
+                    <div className="w-full h-full flex items-center justify-center">
+                      <div className="text-4xl">
+                        {project.client === 'Tech Burner' ? '📱' : '✉️'}
+                      </div>
+                    </div>
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
+                  </div>
+                  <h3 className="text-base font-bold mb-1 group-hover:text-white/80 transition-colors line-clamp-2">
+                    {project.title}
+                  </h3>
+                  <p className="text-white/60 text-xs mb-1">{project.client}</p>
+                  {project.metrics && (
+                    <div className="flex gap-3 mt-2 text-xs text-white/50">
+                      {project.metrics.views && <span>{project.metrics.views}</span>}
+                    </div>
+                  )}
+                </a>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
         {/* Client Sections */}
-        <div className="container mx-auto px-6 py-32">
+        <div className="container mx-auto px-4 md:px-6 py-16 md:py-32">
           <div className="space-y-32">
             {/* Tech Burner */}
             <motion.div

@@ -51,7 +51,7 @@ export default function VideoEditingPage() {
         {/* Hero Section with Parallax */}
         <motion.section
           style={{ y, opacity }}
-          className="relative h-screen flex items-center justify-center overflow-hidden"
+          className="relative min-h-screen flex items-center justify-center overflow-hidden px-4 md:px-6"
         >
           {/* Animated Film Strip Background */}
           <div className="absolute inset-0 opacity-5">
@@ -93,14 +93,14 @@ export default function VideoEditingPage() {
             className="absolute bottom-1/4 left-1/4 w-32 h-32 border border-white/20 rounded-full"
           />
 
-          <div className="relative z-10 text-center px-6">
+          <div className="relative z-10 text-center px-4 md:px-6">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="mb-6"
+              className="mb-4 md:mb-6"
             >
-              <span className="text-white/60 tracking-[0.3em] text-sm uppercase">
+              <span className="text-white/60 tracking-[0.2em] md:tracking-[0.3em] text-xs md:text-sm uppercase">
                 Video Editing
               </span>
             </motion.div>
@@ -109,7 +109,7 @@ export default function VideoEditingPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-7xl md:text-9xl font-bold tracking-tight mb-6"
+              className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-tight mb-4 md:mb-6"
             >
               MOTION
               <br />
@@ -120,29 +120,29 @@ export default function VideoEditingPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-xl md:text-2xl text-white/70 max-w-2xl mx-auto"
+              className="text-sm sm:text-base md:text-xl lg:text-2xl text-white/70 max-w-2xl mx-auto px-4"
             >
               Turning raw footage into dopamine hits, one cut at a time.
-              <br />
+              <br className="hidden sm:block" />
               Millions of views, maximum retention, zero boring moments.
             </motion.p>
           </div>
         </motion.section>
 
         {/* Clients Section */}
-        <section className="py-32 px-6">
+        <section className="py-16 md:py-24 lg:py-32 px-4 md:px-6">
           <div className="max-w-6xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-center mb-16"
+              className="text-center mb-12 md:mb-16"
             >
-              <h2 className="text-5xl font-bold mb-6">Client Work</h2>
-              <p className="text-xl text-white/70">Trusted by top creators for high-quality content</p>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6">Client Work</h2>
+              <p className="text-base md:text-xl text-white/70">Trusted by top creators for high-quality content</p>
             </motion.div>
 
-            <div className="space-y-12">
+            <div className="space-y-12 md:space-y-16 lg:space-y-32">
               {clients.map((client, index) => (
                 <motion.div
                   key={client.id}
@@ -174,8 +174,8 @@ export default function VideoEditingPage() {
                         ? "md:text-right" 
                         : "md:text-left"
                     }`}>
-                      <h3 className="text-3xl font-bold mb-6">{client.name}</h3>
-                      <p className="text-lg text-white/70 leading-relaxed mb-6">
+                      <h3 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6">{client.name}</h3>
+                      <p className="text-sm md:text-base lg:text-lg text-white/70 leading-relaxed mb-4 md:mb-6">
                         {client.description}
                       </p>
                       <motion.a

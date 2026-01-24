@@ -63,6 +63,14 @@ export const metadata: Metadata = {
   keywords: ["video editor", "photographer", "professional editing", "content creator", "tech burner", "video production", "photography", "pratyush"],
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  themeColor: "#000000",
+};
+
 export default function RootLayout({
   children,
 }: {

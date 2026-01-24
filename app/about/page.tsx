@@ -16,28 +16,28 @@ export default function AboutPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen pt-32 pb-20 px-6">
+      <div className="min-h-screen pt-24 md:pt-32 pb-12 md:pb-20 px-4 md:px-6">
         <div className="container mx-auto max-w-6xl">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="mb-32"
+            className="mb-16 md:mb-32"
           >
-            <h1 className="text-7xl md:text-9xl font-bold mb-8">ABOUT</h1>
-            <div className="h-px w-20 bg-white mb-12"></div>
+            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-9xl font-bold mb-6 md:mb-8">ABOUT</h1>
+            <div className="h-px w-16 md:w-20 bg-white mb-8 md:mb-12"></div>
           </motion.div>
 
           {/* Main Content */}
-          <div className="grid md:grid-cols-2 gap-20 mb-32">
+          <div className="grid md:grid-cols-2 gap-12 md:gap-20 mb-16 md:mb-32">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <h2 className="text-4xl font-bold mb-8">Who I Am</h2>
-              <div className="space-y-6 text-white/70 text-lg leading-relaxed">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 md:mb-8">Who I Am</h2>
+              <div className="space-y-4 md:space-y-6 text-white/70 text-sm md:text-base lg:text-lg leading-relaxed">
                 <p>
                   23. Hyderabad, India. Six years deep into turning raw footage into content that people actually watch. 
                   Started young, stayed hungry, and learned that attention spans are earned, not given.
