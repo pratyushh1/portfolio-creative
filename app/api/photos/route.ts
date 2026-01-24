@@ -1,0 +1,27 @@
+import { NextResponse } from 'next/server';
+import fs from 'fs';
+import path from 'path';
+
+export async function GET() {
+  try {
+    const photosDirectory = path.join(process.cwd(), 'public/photos');
+    const files = fs.readdirSync(photosDirectory);
+    
+    // Filter for image files only (jpg, jpeg, png, webp)
+    const imageFiles = files
+      .filter(file => 
+        /\.(jpg|jpeg|png|webp)$/i.test(file) && !file.startsWith('.')
+      )
+      .sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }));
+    
+    // Map to photo objects with IDs
+    const photos = imageFiles.map((file, index) => ({
+      id: index + 1,
+      image: `/photos/${file}`,
+    }));
+    
+    return NextResponse.json(photos);
+  } catch (error) {
+    return NextResponse.json({ error: 'Failed to read photos' }, { status: 500 });
+  }
+}

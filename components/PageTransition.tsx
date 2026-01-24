@@ -16,18 +16,21 @@ export default function PageTransition({ children }: PageTransitionProps) {
         animate={{ scaleY: 0 }}
         exit={{ scaleY: 1 }}
         transition={{
-          duration: 1,
-          ease: [0.22, 1, 0.36, 1],
+          duration: 0.8,
+          ease: [0.76, 0, 0.24, 1],
         }}
-        className="fixed inset-0 z-[100] origin-top bg-gradient-to-b from-dark via-accent-purple/20 to-dark"
+        className="fixed inset-0 z-[100] origin-top bg-white"
       />
       
       <motion.div
-        initial={{ opacity: 0, y: 40 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -40 }}
+        exit={{ opacity: 0, y: -20 }}
         transition={{
-          duration: 1,
+          duration: 0.6,
+          ease: 'easeOut',
+        }}
+      >
           delay: 0.3,
           ease: [0.22, 1, 0.36, 1],
         }}

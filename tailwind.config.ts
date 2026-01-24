@@ -9,19 +9,19 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-montserrat)', 'system-ui', 'sans-serif'],
-        display: ['var(--font-bebas)', 'sans-serif'],
+        sans: ['var(--font-aloevera)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-aloevera)', 'sans-serif'],
       },
       colors: {
         dark: {
-          DEFAULT: '#0a0a0f',
-          lighter: '#121218',
-          card: '#1a1a24',
+          DEFAULT: '#000000',
+          lighter: '#0a0a0a',
+          card: '#111111',
         },
         accent: {
-          purple: '#64748b',
-          blue: '#475569',
-          cyan: '#94a3b8',
+          purple: '#ffffff',
+          blue: '#ffffff',
+          cyan: '#ffffff',
         },
       },
       backgroundImage: {
@@ -42,6 +42,9 @@ const config: Config = {
       animation: {
         'float': 'float 8s ease-in-out infinite',
         'float-slow': 'float 12s ease-in-out infinite',
+        'float-gentle': 'float-gentle 25s ease-in-out infinite',
+        'float-gentle-reverse': 'float-gentle-reverse 30s ease-in-out infinite',
+        'pulse-slow': 'pulse-slow 15s ease-in-out infinite',
         'glow-pulse': 'glow-pulse 6s ease-in-out infinite',
         'gradient-shift': 'gradient-shift 10s ease infinite',
         'parallax-slow': 'parallax-slow 20s ease-in-out infinite',
@@ -52,6 +55,44 @@ const config: Config = {
           '0%, 100%': { transform: 'translateY(0px) translateX(0px)' },
           '33%': { transform: 'translateY(-30px) translateX(10px)' },
           '66%': { transform: 'translateY(-15px) translateX(-10px)' },
+        },
+        'float-gentle': {
+          '0%, 100%': { 
+            transform: 'translate(0px, 0px) scale(1)',
+            opacity: '1',
+          },
+          '33%': { 
+            transform: 'translate(40px, -50px) scale(1.05)',
+            opacity: '0.9',
+          },
+          '66%': { 
+            transform: 'translate(-30px, -30px) scale(0.95)',
+            opacity: '0.85',
+          },
+        },
+        'float-gentle-reverse': {
+          '0%, 100%': { 
+            transform: 'translate(0px, 0px) scale(1)',
+            opacity: '1',
+          },
+          '33%': { 
+            transform: 'translate(-50px, 40px) scale(0.95)',
+            opacity: '0.85',
+          },
+          '66%': { 
+            transform: 'translate(30px, 30px) scale(1.05)',
+            opacity: '0.9',
+          },
+        },
+        'pulse-slow': {
+          '0%, 100%': { 
+            transform: 'scale(1)',
+            opacity: '1',
+          },
+          '50%': { 
+            transform: 'scale(1.1)',
+            opacity: '0.7',
+          },
         },
         'glow-pulse': {
           '0%, 100%': { opacity: '0.4' },

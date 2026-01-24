@@ -1,25 +1,66 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Montserrat } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import CinematicCursor from "@/components/CinematicCursor";
 
-const bebasNeue = Bebas_Neue({ 
-  weight: '400',
-  subsets: ["latin"],
-  variable: '--font-bebas',
-});
-
-const montserrat = Montserrat({ 
-  subsets: ["latin"],
-  variable: '--font-montserrat',
+const aloevera = localFont({ 
+  src: [
+    {
+      path: "../public/fonts/Aloevera-Thin.otf",
+      weight: "100",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Aloevera-ExtraLight.otf",
+      weight: "200",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Aloevera-Light.otf",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Aloevera-Regular.otf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Aloevera-Medium.otf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Aloevera-SemiBold.otf",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Aloevera-Bold.otf",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Aloevera-ExtraBold.otf",
+      weight: "800",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Aloevera-Black.otf",
+      weight: "900",
+      style: "normal",
+    },
+  ],
+  variable: '--font-aloevera',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: "Pratyush | Professional Video Editor",
-  description: "Experienced video editor with 6+ years creating compelling content for leading brands and creators. Specializing in dynamic editing, visual storytelling, and multi-platform content.",
-  keywords: ["video editor", "professional editing", "content creator", "tech burner", "video production", "youtube editor", "pratyush"],
+  title: "Pratyush | Video Editor × Photographer",
+  description: "Visual storyteller with 6+ years creating compelling content for leading brands. Video editing for Tech Burner, Open Letter & photography for portraits, products, events.",
+  keywords: ["video editor", "photographer", "professional editing", "content creator", "tech burner", "video production", "photography", "pratyush"],
 };
 
 export default function RootLayout({
@@ -29,21 +70,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${montserrat.variable} ${bebasNeue.variable} font-sans`}>
+      <body className={`${aloevera.variable} font-sans`}>
         <CinematicCursor />
         <div className="relative min-h-screen">
-          {/* Animated gradient background with multiple layers */}
-          <div className="fixed inset-0 -z-20 bg-dark" />
-          <div className="fixed inset-0 -z-20">
-            <div className="absolute inset-0 bg-gradient-to-br from-dark via-slate-900/20 to-dark" />
-            <div className="absolute inset-0 bg-gradient-to-tl from-dark via-slate-800/20 to-dark" />
-          </div>
-          <div className="fixed inset-0 -z-10 bg-glow-gradient opacity-50 animate-gradient-shift" 
-               style={{ backgroundSize: '200% 200%' }} />
+          {/* Base dark background */}
+          <div className="fixed inset-0 -z-30 bg-dark" />
           
-          {/* Additional atmospheric layers */}
-          <div className="fixed top-0 left-1/4 w-96 h-96 bg-slate-700/10 rounded-full blur-3xl animate-float -z-10" />
-          <div className="fixed bottom-0 right-1/4 w-[500px] h-[500px] bg-slate-600/10 rounded-full blur-3xl animate-float-slow -z-10" />
+          {/* Subtle static mesh gradient */}
+          <div className="fixed inset-0 -z-20 opacity-40">
+            <div className="absolute top-0 left-0 w-full h-full 
+                          bg-gradient-to-br from-slate-900/30 via-transparent to-transparent" />
+            <div className="absolute bottom-0 right-0 w-full h-full 
+                          bg-gradient-to-tl from-slate-800/30 via-transparent to-transparent" />
+          </div>
           
           <Navigation />
           <main className="relative z-10">
