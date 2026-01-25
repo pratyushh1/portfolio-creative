@@ -78,18 +78,21 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${aloevera.variable} font-sans`}>
+      <body className={`${aloevera.variable} font-sans bg-dark selection:bg-white selection:text-black`}>
         <CinematicCursor />
+        
+        {/* Global Cinematic Effects */}
+        <div className="film-grain" />
+        <div className="vignette" />
+        
         <div className="relative min-h-screen">
-          {/* Base dark background */}
+          {/* Subtle Atmosphere Background */}
           <div className="fixed inset-0 -z-30 bg-dark" />
           
-          {/* Subtle static mesh gradient */}
-          <div className="fixed inset-0 -z-20 opacity-40">
-            <div className="absolute top-0 left-0 w-full h-full 
-                          bg-gradient-to-br from-slate-900/30 via-transparent to-transparent" />
-            <div className="absolute bottom-0 right-0 w-full h-full 
-                          bg-gradient-to-tl from-slate-800/30 via-transparent to-transparent" />
+          <div className="fixed inset-0 -z-20 opacity-30">
+             {/* Subtler gradient mesh */}
+            <div className="absolute top-0 left-0 w-full h-[80vh] bg-gradient-to-b from-neutral-900/40 to-transparent" />
+            <div className="absolute bottom-0 w-full h-[50vh] bg-gradient-to-t from-neutral-900/30 to-transparent" />
           </div>
           
           <Navigation />

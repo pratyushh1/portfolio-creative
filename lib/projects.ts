@@ -1,7 +1,7 @@
 export interface Project {
   id: string;
   title: string;
-  client: 'Tech Burner' | 'Open Letter' | 'Other';
+  client: 'Tech Burner' | 'Overlays Clothing' | 'Open Letter' | 'Other';
   category: 'Reels' | 'Shorts' | 'Social Cut';
   thumbnail: string;
   videoUrl?: string;
@@ -82,6 +82,72 @@ export const projects: Project[] = [
     videoUrl: 'https://www.youtube.com/shorts/XML5Plb2Upw',
     description: 'Scroll-stopping edit with maximum impact',
     driveUrl: 'https://drive.google.com/drive/u/1/folders/1HEmZ1FrxnDuIuOOYP0z5YrcMYa-tboyc',
+  },
+
+  // Overlays Clothing Projects
+  {
+    id: 'oc-1',
+    title: 'YouTube Long-Form Content',
+    client: 'Overlays Clothing',
+    category: 'Social Cut',
+    thumbnail: '/thumbnails/oc-1.jpg',
+    videoUrl: 'https://www.youtube.com/@OverlaysNow',
+    description: 'Managed their YouTube presence, turning fabric and fashion into content people actually want to watch',
+    driveUrl: 'https://drive.google.com/drive/folders/your-folder-id',
+    metrics: {
+      views: '500K+',
+      retention: '88%',
+    },
+  },
+  {
+    id: 'oc-2',
+    title: 'Instagram Content Strategy',
+    client: 'Overlays Clothing',
+    category: 'Reels',
+    thumbnail: '/thumbnails/oc-2.jpg',
+    description: 'Built their entire Instagram presence—showcasing clothing drops, brand stories, and everything in between',
+    driveUrl: 'https://drive.google.com/drive/folders/your-folder-id',
+    metrics: {
+      views: '1.2M',
+      retention: '92%',
+    },
+  },
+  {
+    id: 'oc-3',
+    title: 'Product Showcase Series',
+    client: 'Overlays Clothing',
+    category: 'Shorts',
+    thumbnail: '/thumbnails/oc-3.jpg',
+    videoUrl: 'https://www.youtube.com/@OverlaysNow',
+    description: 'Managed their social cuts to display new drops and collections with that scroll-stopping energy',
+    driveUrl: 'https://drive.google.com/drive/folders/your-folder-id',
+  },
+  {
+    id: 'oc-4',
+    title: 'Brand Content Management',
+    client: 'Overlays Clothing',
+    category: 'Social Cut',
+    thumbnail: '/thumbnails/oc-4.jpg',
+    description: 'Complete social media management—from concept to upload, keeping their feed fresh and their audience engaged',
+    driveUrl: 'https://drive.google.com/drive/folders/your-folder-id',
+  },
+  {
+    id: 'oc-5',
+    title: 'Collection Launch Series',
+    client: 'Overlays Clothing',
+    category: 'Shorts',
+    thumbnail: '/thumbnails/oc-5.jpg',
+    description: "Produced launch content that made people care about clothing they hadn't even seen yet",
+    driveUrl: 'https://drive.google.com/drive/folders/your-folder-id',
+  },
+  {
+    id: 'oc-6',
+    title: 'Social Media Highlights',
+    client: 'Overlays Clothing',
+    category: 'Reels',
+    thumbnail: '/thumbnails/oc-6.jpg',
+    description: 'Curated their best moments into reels that actually represented the brand',
+    driveUrl: 'https://drive.google.com/drive/folders/your-folder-id',
   },
 
   // Open Letter Projects

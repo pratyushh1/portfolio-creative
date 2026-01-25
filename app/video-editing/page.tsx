@@ -26,6 +26,15 @@ const clients = [
   },
   {
     id: 3,
+    name: "Overlays Clothing",
+    logo: "/clients/overlays-clothing.jpg",
+    description: "Took over their YouTube and Instagram like it was my full-time job (spoiler: it basically was). Managed everything from product drops to brand storytelling, turning a clothing company's social media into something people actually followed. Long-form YouTube content that showcased collections without putting viewers to sleep. Instagram reels, stories, and posts that made fabric look good. Because when you're selling clothes online, your content better look as sharp as what you're trying to sell. No comedy sketches here—just solid content management that helped a fashion brand show up online.",
+    alignment: "left",
+    youtubeUrl: "https://www.youtube.com/@OverlaysNow",
+    youtubeLine: "Watch the brand come alive",
+  },
+  {
+    id: 4,
     name: "Open Letter",
     logo: "/clients/open-letter.jpg",
     description: "Dedicated 3 months to crafting stories that hit different. While others were chasing trends, I was building narrative arcs that actually made people feel something beyond the urge to scroll. Documentary-style edits with cinematic color grading that would make Spielberg nod respectfully. Every frame paced like poetry, every sound designed to pierce through the noise. Because real storytelling doesn't need clickbait .. it just needs someone who knows when to hold a shot and when to let it breathe.",

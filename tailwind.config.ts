@@ -14,21 +14,24 @@ const config: Config = {
       },
       colors: {
         dark: {
-          DEFAULT: '#000000',
-          lighter: '#0a0a0a',
-          card: '#111111',
+          DEFAULT: '#050505', // Deep black for better contrast
+          lighter: '#1a1a1a', 
+          card: '#0a0a0a',
         },
+        // Cinematic accents - muted but premium
         accent: {
-          purple: '#ffffff',
-          blue: '#ffffff',
-          cyan: '#ffffff',
+          purple: '#E0E0E0', 
+          blue: '#D4D4D4',
+          cyan: '#CCCCCC',
         },
+        // Film vibes
+        film: {
+          grain: '#ffffff',
+        }
       },
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-        'cinematic-gradient': 'linear-gradient(135deg, #0a0a0f 0%, #1e293b 50%, #0a0a0f 100%)',
-        'glow-gradient': 'radial-gradient(circle at 50% 50%, rgba(71, 85, 105, 0.1), transparent 50%)',
+      transitionTimingFunction: {
+        'cinematic': 'cubic-bezier(0.77, 0, 0.175, 1)', // Smooth easeInOutQuart
+        'gentle': 'cubic-bezier(0.33, 1, 0.68, 1)', // Gentle easing
       },
       boxShadow: {
         'glow': '0 0 30px rgba(71, 85, 105, 0.3), 0 0 60px rgba(71, 85, 105, 0.15)',
@@ -49,6 +52,15 @@ const config: Config = {
         'gradient-shift': 'gradient-shift 10s ease infinite',
         'parallax-slow': 'parallax-slow 20s ease-in-out infinite',
         'reveal-text': 'reveal-text 1.5s cubic-bezier(0.77, 0, 0.175, 1) forwards',
+        'fade-in': 'fadeIn 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards',
+        'reveal': 'reveal 1.5s cubic-bezier(0.77, 0, 0.175, 1) forwards',
+        'grain': 'grain 8s steps(10) infinite',
+      },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'cinematic-gradient': 'linear-gradient(135deg, #0a0a0f 0%, #1e293b 50%, #0a0a0f 100%)',
+        'glow-gradient': 'radial-gradient(circle at 50% 50%, rgba(71, 85, 105, 0.1), transparent 50%)',
       },
       keyframes: {
         float: {
@@ -110,10 +122,29 @@ const config: Config = {
           '0%': { opacity: '0', transform: 'translateY(30px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        reveal: {
+          '0%': { transform: 'translateY(100%)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        grain: {
+          '0%, 100%': { transform: 'translate(0, 0)' },
+          '10%': { transform: 'translate(-5%, -5%)' },
+          '20%': { transform: 'translate(-10%, 5%)' },
+          '30%': { transform: 'translate(5%, -10%)' },
+          '40%': { transform: 'translate(-5%, 15%)' },
+          '50%': { transform: 'translate(-10%, 5%)' },
+          '60%': { transform: 'translate(15%, 0)' },
+          '70%': { transform: 'translate(0, 10%)' },
+          '80%': { transform: 'translate(-15%, 0)' },
+          '90%': { transform: 'translate(10%, 5%)' },
+        },
       },
     },
   },
   plugins: [],
 };
-
 export default config;

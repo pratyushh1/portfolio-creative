@@ -26,6 +26,17 @@ videos/
 │       ├── thumb-1.jpg
 │       ├── thumb-2.jpg
 │       └── thumb-3.jpg
+├── overlay-clothing/
+│   ├── youtube-longform-1.mp4
+│   ├── instagram-reels-1.mp4
+│   ├── shorts-1.mp4
+│   └── thumbnails/
+│       ├── oc-1.jpg
+│       ├── oc-2.jpg
+│       ├── oc-3.jpg
+│       ├── oc-4.jpg
+│       ├── oc-5.jpg
+│       └── oc-6.jpg
 ├── open-letter/
 │   ├── video-1.mp4
 │   ├── video-2.mp4

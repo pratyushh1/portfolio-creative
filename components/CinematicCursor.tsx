@@ -1,24 +1,46 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
 
 export default function CinematicCursor() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const [isClicking, setIsClicking] = useState(false);
+  const [cursorText, setCursorText] = useState('');
+  
+  // Initialize off-screen
+  const mouseX = useMotionValue(-100);
+  const mouseY = useMotionValue(-100);
+
+  // 🎥 Cinematic Physics (Heavy, Fluid)
+  const springConfig = { damping: 20, stiffness: 150, mass: 0.6 };
+  const cursorX = useSpring(mouseX, springConfig);
+  const cursorY = useSpring(mouseY, springConfig);
+
+  // Dot Physics (Snappy)
+  const dotConfig = { damping: 35, stiffness: 400, mass: 0.2 };
+  const dotX = useSpring(mouseX, dotConfig);
+  const dotY = useSpring(mouseY, dotConfig);
 
   useEffect(() => {
     const updateMousePosition = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
     };
 
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (target.tagName === 'BUTTON' || target.tagName === 'A' || target.closest('button, a, input, textarea')) {
+      // Intelligently detect hoverable elements
+      const hoverElement = target.closest('a, button, [data-cursor], input, textarea, .cursor-hover');
+      
+      if (hoverElement) {
         setIsHovering(true);
+        // Extract custom text data attribute if available
+        const customText = hoverElement.getAttribute('data-cursor');
+        setCursorText(customText || ''); // Default empty implies 'VIEW' or just shape change
       } else {
         setIsHovering(false);
+        setCursorText('');
       }
     };
 
@@ -36,85 +58,56 @@ export default function CinematicCursor() {
       window.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, []);
+  }, [mouseX, mouseY]);
 
   return (
     <>
-      {/* Outer glow ring */}
+      {/* 1. Precision Dot (Disappears on hover) */}
       <motion.div
-        className="fixed pointer-events-none z-[9999]"
+        className="hidden lg:block fixed top-0 left-0 w-2 h-2 bg-white rounded-full pointer-events-none z-[9999] mix-blend-difference"
+        style={{ x: dotX, y: dotY }}
         animate={{
-          x: mousePosition.x - 24,
-          y: mousePosition.y - 24,
-          scale: isHovering ? 1.4 : isClicking ? 0.8 : 1,
-          opacity: isHovering ? 0.6 : 0.3,
+          scale: isHovering ? 0 : 1,
+          translateX: '-50%',
+          translateY: '-50%',
         }}
-        transition={{
-          type: 'spring',
-          damping: 25,
-          stiffness: 250,
-          mass: 0.4,
-        }}
-      >
-        <div className="w-12 h-12 rounded-full border border-slate-400/40 blur-sm" />
-      </motion.div>
+        transition={{ duration: 0.2 }}
+      />
 
-      {/* Main cursor ring */}
+      {/* 2. Magnetic Follower (Transforms into View Lens) */}
       <motion.div
-        className="fixed pointer-events-none z-[9999]"
+        className="hidden lg:flex fixed top-0 left-0 rounded-full pointer-events-none z-[9998] mix-blend-difference items-center justify-center overflow-hidden"
+        style={{ x: cursorX, y: cursorY }}
         animate={{
-          x: mousePosition.x - 16,
-          y: mousePosition.y - 16,
-          scale: isHovering ? 1.5 : isClicking ? 0.7 : 1,
+          width: isHovering ? (cursorText ? 120 : 60) : 24,
+          height: isHovering ? (cursorText ? 120 : 60) : 24,
+          backgroundColor: isHovering ? '#ffffff' : 'transparent',
+          border: isHovering ? 'none' : '1.5px solid rgba(255,255,255,0.6)',
+          translateX: '-50%',
+          translateY: '-50%',
+          scale: isClicking ? 0.85 : 1,
         }}
         transition={{
-          type: 'spring',
-          damping: 28,
-          stiffness: 280,
-          mass: 0.35,
+          type: "spring",
+          stiffness: 200,
+          damping: 20,
+          mass: 0.5
         }}
       >
-        <div className="w-8 h-8 rounded-full border-2 border-slate-300/60 
-                       shadow-[0_0_15px_rgba(148,163,184,0.3)]" />
+        <AnimatePresence>
+          {isHovering && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.6 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.6 }}
+              transition={{ duration: 0.2, delay: 0.05 }}
+              className="text-black text-[11px] font-bold tracking-[0.25em] font-display uppercase flex items-center justify-center gap-2"
+            >
+             {cursorText}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
-      
-      {/* Center dot with glow */}
-      <motion.div
-        className="fixed pointer-events-none z-[9999]"
-        animate={{
-          x: mousePosition.x - 3,
-          y: mousePosition.y - 3,
-          scale: isClicking ? 1.5 : 1,
-        }}
-        transition={{
-          type: 'spring',
-          damping: 35,
-          stiffness: 400,
-          mass: 0.2,
-        }}
-      >
-        <div className="w-1.5 h-1.5 rounded-full bg-slate-200 
-                       shadow-[0_0_10px_rgba(226,232,240,0.8)]" />
-      </motion.div>
-
-      {/* Trailing particles */}
-      {[...Array(3)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="fixed w-1 h-1 rounded-full bg-slate-400/40 pointer-events-none z-[9998] blur-[0.5px]"
-          animate={{
-            x: mousePosition.x - 2,
-            y: mousePosition.y - 2,
-            opacity: isHovering ? 0.6 : 0.3,
-          }}
-          transition={{
-            type: 'spring',
-            damping: 15 - i * 3,
-            stiffness: 120 - i * 20,
-            mass: 0.3 + i * 0.15,
-          }}
-        />
-      ))}
     </>
   );
 }
