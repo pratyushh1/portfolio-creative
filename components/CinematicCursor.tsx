@@ -70,6 +70,7 @@ export default function CinematicCursor() {
           scale: isHovering ? 0 : 1,
           translateX: '-50%',
           translateY: '-50%',
+          boxShadow: '0 0 20px 2px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 1)', // Intense core glow
         }}
         transition={{ duration: 0.2 }}
       />
@@ -81,8 +82,11 @@ export default function CinematicCursor() {
         animate={{
           width: isHovering ? (cursorText ? 120 : 60) : 24,
           height: isHovering ? (cursorText ? 120 : 60) : 24,
-          backgroundColor: isHovering ? '#ffffff' : 'transparent',
-          border: isHovering ? 'none' : '1.5px solid rgba(255,255,255,0.6)',
+          backgroundColor: isHovering ? 'rgba(255, 255, 255, 0.95)' : 'transparent',
+          border: isHovering ? 'none' : '1.5px solid rgba(255, 255, 255, 0.8)',
+          boxShadow: isHovering 
+            ? '0 0 60px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 255, 255, 0.4)' 
+            : '0 0 25px rgba(255, 255, 255, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.2)', // Complex multi-layer cinematic glow
           translateX: '-50%',
           translateY: '-50%',
           scale: isClicking ? 0.85 : 1,
