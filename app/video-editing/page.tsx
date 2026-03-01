@@ -65,18 +65,18 @@ export default function VideoEditingPage() {
           {/* Animated Film Strip Background */}
           <div className="absolute inset-0 opacity-5">
             <div className="flex h-full gap-4">
-              {[...Array(20)].map((_, i) => (
+              {[...Array(8)].map((_, i) => (
                 <motion.div
                   key={i}
                   animate={{
                     y: i % 2 === 0 ? [0, -50, 0] : [0, 50, 0],
                   }}
                   transition={{
-                    duration: 4 + i * 0.3,
+                    duration: 4 + i * 0.5,
                     repeat: Infinity,
                     ease: "easeInOut",
                   }}
-                  className="flex-shrink-0 w-2 bg-white"
+                  className="flex-shrink-0 w-2 bg-white will-change-transform"
                 />
               ))}
             </div>
@@ -104,9 +104,9 @@ export default function VideoEditingPage() {
 
           <div className="relative z-10 text-center px-4 md:px-6">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.5 }}
               className="mb-4 md:mb-6"
             >
               <span className="text-white/60 tracking-[0.2em] md:tracking-[0.3em] text-xs md:text-sm uppercase">
@@ -115,9 +115,9 @@ export default function VideoEditingPage() {
             </motion.div>
 
             <motion.h1
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
               className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-tight mb-4 md:mb-6"
             >
               MOTION
@@ -126,9 +126,9 @@ export default function VideoEditingPage() {
             </motion.h1>
 
             <motion.p
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
               className="text-sm sm:text-base md:text-xl lg:text-2xl text-white/70 max-w-2xl mx-auto px-4"
             >
               Turning raw footage into dopamine hits, one cut at a time.
@@ -155,10 +155,10 @@ export default function VideoEditingPage() {
               {clients.map((client, index) => (
                 <motion.div
                   key={client.id}
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: index * 0.2 }}
+                  transition={{ delay: Math.min(index * 0.1, 0.3) }}
                   className="bg-white/5 border border-white/10 rounded-2xl p-8 md:p-12"
                 >
                   <div className={`flex flex-col items-center gap-8 ${

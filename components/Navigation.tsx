@@ -30,7 +30,7 @@ export default function Navigation() {
       <motion.nav
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 1 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
         className={`fixed top-0 w-full z-50 transition-all duration-700 ${
           scrolled ? 'py-4 bg-black/50 backdrop-blur-md' : 'py-8 bg-transparent'
         }`}

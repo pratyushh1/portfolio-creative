@@ -2,19 +2,17 @@
 
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import PageTransition from "@/components/PageTransition";
-import { useState, useRef } from "react";
-
-const categories = [
-  { id: "all", name: "All Photos" },
-  { id: "portrait", name: "Portraits" },
-  { id: "landscape", name: "Landscapes" },
-  { id: "product", name: "Products" },
-  { id: "event", name: "Events" },
-];
+import { useState, useRef, useEffect, useCallback } from "react";
 
 interface Photo {
   id: number;
   image: string;
+}
+
+interface SharonPhoto {
+  id: number;
+  image: string;
+  type: "portrait" | "show" | "other";
 }
 
 // Static photo list - no API call needed
@@ -48,8 +46,10 @@ const photos: Photo[] = [
 ];
 
 export default function PhotographyPage() {
-  const [activeCategory, setActiveCategory] = useState("all");
-  const [selectedPhoto, setSelectedPhoto] = useState<number | null>(null);
+  const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
+  const [sharonPhotos, setSharonPhotos] = useState<SharonPhoto[]>([]);
+  const [sharonFilter, setSharonFilter] = useState<"all" | "portrait" | "show">("all");
+  const [sharonLoading, setSharonLoading] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -58,6 +58,74 @@ export default function PhotographyPage() {
 
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+
+  // Fetch Sharon Verma photos from API
+  useEffect(() => {
+    fetch("/api/photos/sharon-verma")
+      .then((res) => res.json())
+      .then((data: SharonPhoto[]) => {
+        if (Array.isArray(data)) {
+          setSharonPhotos(data);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setSharonLoading(false));
+  }, []);
+
+  const filteredSharonPhotos =
+    sharonFilter === "all"
+      ? sharonPhotos
+      : sharonPhotos.filter((p) => p.type === sharonFilter);
+
+  // Build a unified photo list for lightbox navigation
+  const allLightboxPhotos: string[] = [
+    ...filteredSharonPhotos.map((p) => p.image),
+    ...photos.map((p) => p.image),
+  ];
+
+  const selectedIndex = selectedPhoto
+    ? allLightboxPhotos.indexOf(selectedPhoto)
+    : -1;
+
+  const goToPhoto = useCallback(
+    (direction: "prev" | "next") => {
+      if (selectedIndex === -1) return;
+      const nextIndex =
+        direction === "prev" ? selectedIndex - 1 : selectedIndex + 1;
+      if (nextIndex >= 0 && nextIndex < allLightboxPhotos.length) {
+        setSelectedPhoto(allLightboxPhotos[nextIndex]);
+      }
+    },
+    [selectedIndex, allLightboxPhotos]
+  );
+
+  // Keyboard navigation for lightbox
+  useEffect(() => {
+    if (!selectedPhoto) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelectedPhoto(null);
+      if (e.key === "ArrowLeft") goToPhoto("prev");
+      if (e.key === "ArrowRight") goToPhoto("next");
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [selectedPhoto, goToPhoto]);
+
+  // Preload all static photos immediately on mount
+  useEffect(() => {
+    photos.forEach((photo) => {
+      const img = new Image();
+      img.src = photo.image;
+    });
+  }, []);
+
+  // Preload Sharon photos once loaded from API
+  useEffect(() => {
+    sharonPhotos.forEach((photo) => {
+      const img = new Image();
+      img.src = photo.image;
+    });
+  }, [sharonPhotos]);
 
   const filteredPhotos = photos;
 
@@ -128,6 +196,170 @@ export default function PhotographyPage() {
           </div>
         </motion.section>
 
+        {/* ═══════════════════════════════════════════════════════════════════
+            ★ FEATURED SHOOT — SHARON VERMA ★
+        ═══════════════════════════════════════════════════════════════════ */}
+        <section className="relative py-16 md:py-24 lg:py-32 px-4 md:px-6 overflow-hidden">
+          {/* Ambient gold glow background */}
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-amber-500/5 rounded-full blur-[120px]" />
+            <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-amber-400/5 rounded-full blur-[100px]" />
+          </div>
+
+          <div className="max-w-7xl mx-auto relative z-10">
+            {/* Featured Badge + Header */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-10 md:mb-16"
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                className="inline-flex items-center gap-2 px-4 py-1.5 mb-6 rounded-full border border-amber-400/40 bg-amber-500/10 backdrop-blur-sm"
+              >
+                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                <span className="text-amber-300 text-xs sm:text-sm font-semibold tracking-[0.2em] uppercase">
+                  Featured Shoot
+                </span>
+              </motion.div>
+
+              <h2 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-4 md:mb-6">
+                <span className="bg-gradient-to-r from-amber-200 via-white to-amber-200 bg-clip-text text-transparent">
+                  Sharon Verma
+                </span>
+              </h2>
+
+              <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/60 max-w-2xl mx-auto leading-relaxed px-2">
+                Portraits &amp; live show coverage for one of India&apos;s rising standup comedians.
+                <br className="hidden sm:block" />
+                Capturing the energy on stage and the person behind the punchlines.
+              </p>
+
+              {/* Filter Tabs */}
+              {sharonPhotos.length > 0 && (
+                <div className="flex items-center justify-center gap-2 sm:gap-3 mt-8">
+                  {(
+                    [
+                      { key: "all", label: "All" },
+                      { key: "portrait", label: "Portraits" },
+                      { key: "show", label: "The Show" },
+                    ] as const
+                  ).map((tab) => (
+                    <button
+                      key={tab.key}
+                      onClick={() => setSharonFilter(tab.key)}
+                      className={`
+                        px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-medium tracking-wide transition-all duration-300
+                        ${
+                          sharonFilter === tab.key
+                            ? "bg-amber-400/20 text-amber-200 border border-amber-400/50 shadow-[0_0_15px_rgba(251,191,36,0.15)]"
+                            : "text-white/50 border border-white/10 hover:border-white/30 hover:text-white/80"
+                        }
+                      `}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+
+            {/* Photo Grid — Masonry-style with staggered heights */}
+            {sharonLoading ? (
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
+                {[...Array(6)].map((_, i) => (
+                  <div
+                    key={i}
+                    className={`bg-white/5 rounded-xl animate-pulse ${
+                      i % 3 === 0 ? "aspect-[3/4]" : "aspect-square"
+                    }`}
+                  />
+                ))}
+              </div>
+            ) : filteredSharonPhotos.length > 0 ? (
+              <div className="columns-2 lg:columns-3 gap-3 md:gap-5 space-y-3 md:space-y-5">
+                <AnimatePresence mode="popLayout">
+                  {filteredSharonPhotos.map((photo, index) => (
+                    <motion.button
+                      key={photo.id}
+                      layout
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      transition={{ duration: 0.25, delay: Math.min(index * 0.03, 0.3) }}
+                      onClick={() => setSelectedPhoto(photo.image)}
+                      className="group relative w-full break-inside-avoid rounded-xl overflow-hidden cursor-pointer border border-white/10 hover:border-amber-400/30 transition-colors duration-300 block"
+                    >
+                      {/* The image — object-cover inside auto-height container */}
+                      <img
+                        src={photo.image}
+                        alt={`Sharon Verma — ${photo.type}`}
+                        className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105"
+                        loading="eager"
+                        decoding="async"
+                        fetchPriority={index < 4 ? "high" : "auto"}
+                      />
+
+                      {/* Hover overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3 sm:p-4">
+                        <div>
+                          <span className="inline-block px-2 py-0.5 text-[10px] sm:text-xs font-semibold uppercase tracking-wider rounded-full bg-amber-400/20 text-amber-200 border border-amber-400/30 mb-1">
+                            {photo.type === "portrait" ? "Portrait" : photo.type === "show" ? "Live Show" : "Behind the Scenes"}
+                          </span>
+                          <p className="text-white text-xs sm:text-sm font-medium">Click to view</p>
+                        </div>
+                      </div>
+
+                      {/* Subtle amber glow on hover */}
+                      <div className="absolute inset-0 rounded-xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-[inset_0_0_30px_rgba(251,191,36,0.08)]" />
+                    </motion.button>
+                  ))}
+                </AnimatePresence>
+              </div>
+            ) : (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-center py-16 md:py-24 border border-dashed border-white/20 rounded-2xl"
+              >
+                <div className="text-5xl md:text-6xl mb-4">📸</div>
+                <p className="text-white/40 text-sm md:text-base">
+                  Photos coming soon — drop images into{" "}
+                  <code className="text-amber-300/70 bg-white/5 px-2 py-0.5 rounded text-xs">
+                    public/photos/sharon-verma/
+                  </code>
+                </p>
+                <p className="text-white/30 text-xs mt-2">
+                  Name files <code className="text-white/50">portrait-1.jpg</code>, <code className="text-white/50">show-1.jpg</code>, etc.
+                </p>
+              </motion.div>
+            )}
+          </div>
+
+          {/* Bottom gold separator line */}
+          <div className="max-w-7xl mx-auto mt-16 md:mt-24">
+            <div className="h-px bg-gradient-to-r from-transparent via-amber-400/30 to-transparent" />
+          </div>
+        </section>
+
+        {/* Other Work Header */}
+        <section className="pt-8 md:pt-12 px-4 md:px-6">
+          <div className="max-w-7xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-8 md:mb-12"
+            >
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 md:mb-4">More Work</h2>
+              <p className="text-sm md:text-base text-white/50">A broader look at my photography</p>
+            </motion.div>
+          </div>
+        </section>
+
         {/* Photo Grid */}
         <section className="py-12 md:py-16 lg:py-20 px-4 md:px-6">
           <div className="max-w-7xl mx-auto">
@@ -137,9 +369,9 @@ export default function PhotographyPage() {
                   key={photo.id}
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
-                  viewport={{ once: true, margin: "100px" }}
-                  transition={{ duration: 0.2 }}
-                  onClick={() => setSelectedPhoto(photo.id)}
+                  viewport={{ once: true, margin: "200px" }}
+                  transition={{ duration: 0.15 }}
+                  onClick={() => setSelectedPhoto(photo.image)}
                   className="group relative aspect-[4/5] bg-zinc-900 border border-white/10 rounded-lg overflow-hidden cursor-pointer"
                 >
                   {/* Image */}
@@ -147,7 +379,9 @@ export default function PhotographyPage() {
                     src={photo.image}
                     alt={`Photo ${photo.id}`}
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    loading={index < 3 ? "eager" : "lazy"}
+                    loading="eager"
+                    decoding="async"
+                    fetchPriority={index < 6 ? "high" : "auto"}
                   />
 
                   {/* Hover Overlay */}
@@ -301,6 +535,7 @@ export default function PhotographyPage() {
         </section>
 
         {/* Lightbox Modal */}
+        <AnimatePresence>
         {selectedPhoto !== null && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -316,15 +551,12 @@ export default function PhotographyPage() {
               transition={{ delay: 0.2 }}
               onClick={(e) => {
                 e.stopPropagation();
-                const currentIndex = filteredPhotos.findIndex(p => p.id === selectedPhoto);
-                if (currentIndex > 0) {
-                  setSelectedPhoto(filteredPhotos[currentIndex - 1].id);
-                }
+                goToPhoto("prev");
               }}
-              disabled={filteredPhotos.findIndex(p => p.id === selectedPhoto) === 0}
-              className="absolute left-6 z-10 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+              disabled={selectedIndex <= 0}
+              className="absolute left-2 sm:left-6 z-10 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </motion.button>
@@ -335,51 +567,57 @@ export default function PhotographyPage() {
               transition={{ delay: 0.2 }}
               onClick={(e) => {
                 e.stopPropagation();
-                const currentIndex = filteredPhotos.findIndex(p => p.id === selectedPhoto);
-                if (currentIndex < filteredPhotos.length - 1) {
-                  setSelectedPhoto(filteredPhotos[currentIndex + 1].id);
-                }
+                goToPhoto("next");
               }}
-              disabled={filteredPhotos.findIndex(p => p.id === selectedPhoto) === filteredPhotos.length - 1}
-              className="absolute right-6 z-10 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+              disabled={selectedIndex >= allLightboxPhotos.length - 1}
+              className="absolute right-2 sm:right-6 z-10 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </motion.button>
 
             {/* Full Image */}
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
+              key={selectedPhoto}
+              initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.2 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative max-w-7xl max-h-[90vh] w-full h-full cursor-default"
+              className="relative max-w-7xl max-h-[90vh] w-full h-full cursor-default flex items-center justify-center"
             >
               <img
-                src={photos.find(p => p.id === selectedPhoto)?.image || ""}
+                src={selectedPhoto}
                 alt="Full size photo"
-                className="max-w-full max-h-[90vh] w-auto h-auto object-contain mx-auto"
+                className="max-w-full max-h-[85vh] w-auto h-auto object-contain mx-auto rounded-lg"
               />
+              {/* Preload adjacent images for instant navigation */}
+              {selectedIndex > 0 && (
+                <link rel="prefetch" href={allLightboxPhotos[selectedIndex - 1]} as="image" />
+              )}
+              {selectedIndex < allLightboxPhotos.length - 1 && (
+                <link rel="prefetch" href={allLightboxPhotos[selectedIndex + 1]} as="image" />
+              )}
             </motion.div>
 
             {/* Photo Counter & Go Back Button */}
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4">
-              <div className="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm">
-                {filteredPhotos.findIndex(p => p.id === selectedPhoto) + 1} / {filteredPhotos.length}
+            <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
+              <div className="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-xs sm:text-sm">
+                {selectedIndex + 1} / {allLightboxPhotos.length}
               </div>
               <motion.button
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
                 onClick={() => setSelectedPhoto(null)}
-                className="px-8 py-3 bg-white text-black font-semibold rounded-full hover:bg-white/90 transition-all shadow-2xl"
+                className="px-6 sm:px-8 py-2.5 sm:py-3 bg-white text-black text-sm font-semibold rounded-full hover:bg-white/90 transition-all shadow-2xl"
               >
                 Go Back
               </motion.button>
             </div>
           </motion.div>
         )}
+        </AnimatePresence>
       </div>
     </PageTransition>
   );

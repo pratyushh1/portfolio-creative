@@ -15,10 +15,10 @@ export default function PageTransition({ children }: PageTransitionProps) {
         animate={{ scaleY: 0 }}
         exit={{ scaleY: 0 }}
         transition={{
-          duration: 1.2,
+          duration: 0.6,
           ease: [0.22, 1, 0.36, 1],
         }}
-        className="fixed inset-0 z-[100] origin-top bg-neutral-900 pointer-events-none"
+        className="fixed inset-0 z-[100] origin-top bg-neutral-900 pointer-events-none will-change-transform"
       />
       
       <motion.div
@@ -26,8 +26,8 @@ export default function PageTransition({ children }: PageTransitionProps) {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{
-          duration: 0.8,
-          delay: 0.5,
+          duration: 0.4,
+          delay: 0.15,
           ease: "easeOut"
         }}
       >

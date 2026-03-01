@@ -92,6 +92,17 @@
     overflow-x: hidden;
   }
 
+  /* GPU-accelerated smooth scroll */
+  * {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+
+  /* Preload hint for images */
+  img {
+    content-visibility: auto;
+  }
+
   /* Better touch targets for mobile */
   button, a {
     min-height: 44px;

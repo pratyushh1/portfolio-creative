@@ -22,7 +22,7 @@ export default function Home() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.5, ease: [0.77, 0, 0.175, 1], delay: 0.2 }}
+            transition={{ duration: 0.8, ease: [0.77, 0, 0.175, 1], delay: 0.1 }}
             className="text-xs sm:text-sm md:text-base tracking-[0.4em] uppercase text-white/40 mb-8 md:mb-12 font-light"
           >
             Creative Portfolio
@@ -33,7 +33,7 @@ export default function Home() {
             <motion.h1 
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
-              transition={{ duration: 1.5, ease: [0.77, 0, 0.175, 1], delay: 0.4 }}
+              transition={{ duration: 0.8, ease: [0.77, 0, 0.175, 1], delay: 0.15 }}
               className="text-[12vw] md:text-[min(10vw,180px)] font-bold leading-[0.85] tracking-tight font-display text-white mix-blend-difference"
             >
               PRATYUSH
@@ -44,7 +44,7 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0, scaleX: 0 }}
             animate={{ opacity: 1, scaleX: 1 }}
-            transition={{ duration: 1.5, ease: [0.77, 0, 0.175, 1], delay: 0.8 }}
+            transition={{ duration: 0.8, ease: [0.77, 0, 0.175, 1], delay: 0.3 }}
             className="h-px w-32 md:w-48 bg-white/20 mx-auto mb-8 md:mb-12"
           />
 
@@ -52,7 +52,7 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1.5, delay: 1 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
             className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-12 text-sm md:text-lg tracking-[0.2em] font-light text-white/80"
           >
             <span className="uppercase hover:text-white transition-colors duration-500">Video Editor</span>
@@ -64,7 +64,7 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, delay: 1.4, ease: "easeOut" }}
+            transition={{ duration: 0.6, delay: 0.55, ease: "easeOut" }}
             className="mt-16 md:mt-24 flex flex-col md:flex-row gap-6 md:gap-10 justify-center items-center"
           >
             <Link href="/video-editing" className="group relative overflow-hidden">
@@ -89,7 +89,7 @@ export default function Home() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1.5, delay: 2 }}
+          transition={{ duration: 0.6, delay: 0.8 }}
           className="absolute bottom-12 left-0 right-0 flex justify-center"
         >
           <div className="flex flex-col items-center gap-2">
@@ -113,7 +113,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 100 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-10%" }}
-              transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >
               <Link href="/video-editing" className="group block">
                 <div className="relative aspect-[4/5] md:aspect-[3/4] overflow-hidden mb-8 bg-zinc-900">
@@ -143,7 +143,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 100 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-10%" }}
-              transition={{ duration: 1.2, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
               className="md:mt-32" 
             >
               <Link href="/photography" className="group block">
