@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import PageTransition from "@/components/PageTransition";
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 
 interface Photo {
   id: number;
@@ -13,6 +13,12 @@ interface SharonPhoto {
   id: number;
   image: string;
   type: "portrait" | "show" | "other";
+}
+
+interface ImageDimensions {
+  width: number;
+  height: number;
+  ratio: number; // height / width
 }
 
 // Static photo list - no API call needed
@@ -50,6 +56,8 @@ export default function PhotographyPage() {
   const [sharonPhotos, setSharonPhotos] = useState<SharonPhoto[]>([]);
   const [sharonFilter, setSharonFilter] = useState<"all" | "portrait" | "show">("all");
   const [sharonLoading, setSharonLoading] = useState(true);
+  const [sharonImagesReady, setSharonImagesReady] = useState(false);
+  const [imageDims, setImageDims] = useState<Record<string, ImageDimensions>>({});
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -59,23 +67,105 @@ export default function PhotographyPage() {
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
-  // Fetch Sharon Verma photos from API
+  // Fetch Sharon Verma photos from API — cached in sessionStorage
   useEffect(() => {
+    const cached = sessionStorage.getItem("sharon-photos");
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setSharonPhotos(parsed);
+          setSharonLoading(false);
+          return;
+        }
+      } catch {}
+    }
     fetch("/api/photos/sharon-verma")
       .then((res) => res.json())
       .then((data: SharonPhoto[]) => {
         if (Array.isArray(data)) {
           setSharonPhotos(data);
+          sessionStorage.setItem("sharon-photos", JSON.stringify(data));
         }
       })
       .catch(() => {})
       .finally(() => setSharonLoading(false));
   }, []);
 
-  const filteredSharonPhotos =
-    sharonFilter === "all"
-      ? sharonPhotos
-      : sharonPhotos.filter((p) => p.type === sharonFilter);
+  const filteredSharonPhotos = useMemo(
+    () =>
+      sharonFilter === "all"
+        ? sharonPhotos
+        : sharonPhotos.filter((p) => p.type === sharonFilter),
+    [sharonPhotos, sharonFilter]
+  );
+
+  // Mark an image as loaded for fade-in — no longer needed, replaced with bulk preload
+
+  // Distribute photos into manual columns for zero-reflow masonry
+  const sharonColumns = useMemo(() => {
+    if (!sharonImagesReady || filteredSharonPhotos.length === 0) return [];
+    // Use 3 columns on lg, but we render both 2-col and 3-col and hide via CSS
+    const makeCols = (numCols: number) => {
+      const cols: SharonPhoto[][] = Array.from({ length: numCols }, () => []);
+      const heights = new Array(numCols).fill(0);
+      filteredSharonPhotos.forEach((photo) => {
+        // Find shortest column
+        const shortest = heights.indexOf(Math.min(...heights));
+        cols[shortest].push(photo);
+        const dim = imageDims[photo.image];
+        heights[shortest] += dim ? dim.ratio : 1;
+      });
+      return cols;
+    };
+    return makeCols(3); // We'll use 2 cols on mobile via CSS grid
+  }, [sharonImagesReady, filteredSharonPhotos, imageDims]);
+
+  const sharonColumns2 = useMemo(() => {
+    if (!sharonImagesReady || filteredSharonPhotos.length === 0) return [];
+    const cols: SharonPhoto[][] = [[], []];
+    const heights = [0, 0];
+    filteredSharonPhotos.forEach((photo) => {
+      const shortest = heights.indexOf(Math.min(...heights));
+      cols[shortest].push(photo);
+      const dim = imageDims[photo.image];
+      heights[shortest] += dim ? dim.ratio : 1;
+    });
+    return cols;
+  }, [sharonImagesReady, filteredSharonPhotos, imageDims]);
+
+  // Preload ALL sharon images in background, capture dimensions, flip ready flag
+  useEffect(() => {
+    if (sharonPhotos.length === 0) return;
+    let cancelled = false;
+    const dims: Record<string, ImageDimensions> = {};
+    const promises = sharonPhotos.map(
+      (photo) =>
+        new Promise<void>((resolve) => {
+          const img = new window.Image();
+          img.onload = () => {
+            dims[photo.image] = {
+              width: img.naturalWidth,
+              height: img.naturalHeight,
+              ratio: img.naturalHeight / img.naturalWidth,
+            };
+            resolve();
+          };
+          img.onerror = () => {
+            dims[photo.image] = { width: 1, height: 1, ratio: 1 };
+            resolve();
+          };
+          img.src = photo.image;
+        })
+    );
+    Promise.all(promises).then(() => {
+      if (!cancelled) {
+        setImageDims(dims);
+        setSharonImagesReady(true);
+      }
+    });
+    return () => { cancelled = true; };
+  }, [sharonPhotos]);
 
   // Build a unified photo list for lightbox navigation
   const allLightboxPhotos: string[] = [
@@ -120,12 +210,7 @@ export default function PhotographyPage() {
   }, []);
 
   // Preload Sharon photos once loaded from API
-  useEffect(() => {
-    sharonPhotos.forEach((photo) => {
-      const img = new Image();
-      img.src = photo.image;
-    });
-  }, [sharonPhotos]);
+  // (handled by the bulk preload effect above)
 
   const filteredPhotos = photos;
 
@@ -267,9 +352,9 @@ export default function PhotographyPage() {
               )}
             </motion.div>
 
-            {/* Photo Grid — Masonry-style with staggered heights */}
-            {sharonLoading ? (
-              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
+            {/* Photo Grid — JS-computed masonry, zero CSS columns reflow */}
+            {(sharonLoading || (!sharonImagesReady && sharonPhotos.length > 0)) ? (
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
                 {[...Array(6)].map((_, i) => (
                   <div
                     key={i}
@@ -279,46 +364,73 @@ export default function PhotographyPage() {
                   />
                 ))}
               </div>
-            ) : filteredSharonPhotos.length > 0 ? (
-              <div className="columns-2 lg:columns-3 gap-3 md:gap-5 space-y-3 md:space-y-5">
-                <AnimatePresence mode="popLayout">
-                  {filteredSharonPhotos.map((photo, index) => (
-                    <motion.button
-                      key={photo.id}
-                      layout
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.9 }}
-                      transition={{ duration: 0.25, delay: Math.min(index * 0.03, 0.3) }}
-                      onClick={() => setSelectedPhoto(photo.image)}
-                      className="group relative w-full break-inside-avoid rounded-xl overflow-hidden cursor-pointer border border-white/10 hover:border-amber-400/30 transition-colors duration-300 block"
-                    >
-                      {/* The image — object-cover inside auto-height container */}
-                      <img
-                        src={photo.image}
-                        alt={`Sharon Verma — ${photo.type}`}
-                        className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105"
-                        loading="eager"
-                        decoding="async"
-                        fetchPriority={index < 4 ? "high" : "auto"}
-                      />
-
-                      {/* Hover overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3 sm:p-4">
-                        <div>
-                          <span className="inline-block px-2 py-0.5 text-[10px] sm:text-xs font-semibold uppercase tracking-wider rounded-full bg-amber-400/20 text-amber-200 border border-amber-400/30 mb-1">
-                            {photo.type === "portrait" ? "Portrait" : photo.type === "show" ? "Live Show" : "Behind the Scenes"}
-                          </span>
-                          <p className="text-white text-xs sm:text-sm font-medium">Click to view</p>
-                        </div>
-                      </div>
-
-                      {/* Subtle amber glow on hover */}
-                      <div className="absolute inset-0 rounded-xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-[inset_0_0_30px_rgba(251,191,36,0.08)]" />
-                    </motion.button>
+            ) : sharonPhotos.length > 0 ? (
+              <>
+                {/* 2-column layout for mobile */}
+                <div className="grid grid-cols-2 gap-3 md:gap-5 lg:hidden">
+                  {sharonColumns2.map((col, colIdx) => (
+                    <div key={colIdx} className="flex flex-col gap-3 md:gap-5">
+                      {col.map((photo) => {
+                        const dim = imageDims[photo.image];
+                        return (
+                          <button
+                            key={photo.id}
+                            onClick={() => setSelectedPhoto(photo.image)}
+                            className="group relative w-full rounded-xl overflow-hidden cursor-pointer border border-white/10 hover:border-amber-400/30 transition-colors duration-200 block"
+                            style={{ aspectRatio: dim ? `${dim.width} / ${dim.height}` : undefined }}
+                          >
+                            <img
+                              src={photo.image}
+                              alt={`Sharon Verma — ${photo.type}`}
+                              className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-end p-3 sm:p-4 z-10">
+                              <div>
+                                <span className="inline-block px-2 py-0.5 text-[10px] sm:text-xs font-semibold uppercase tracking-wider rounded-full bg-amber-400/20 text-amber-200 border border-amber-400/30 mb-1">
+                                  {photo.type === "portrait" ? "Portrait" : photo.type === "show" ? "Live Show" : "Behind the Scenes"}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="absolute inset-0 rounded-xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200 shadow-[inset_0_0_30px_rgba(251,191,36,0.08)] z-10" />
+                          </button>
+                        );
+                      })}
+                    </div>
                   ))}
-                </AnimatePresence>
-              </div>
+                </div>
+                {/* 3-column layout for desktop */}
+                <div className="hidden lg:grid grid-cols-3 gap-5">
+                  {sharonColumns.map((col, colIdx) => (
+                    <div key={colIdx} className="flex flex-col gap-5">
+                      {col.map((photo) => {
+                        const dim = imageDims[photo.image];
+                        return (
+                          <button
+                            key={photo.id}
+                            onClick={() => setSelectedPhoto(photo.image)}
+                            className="group relative w-full rounded-xl overflow-hidden cursor-pointer border border-white/10 hover:border-amber-400/30 transition-colors duration-200 block"
+                            style={{ aspectRatio: dim ? `${dim.width} / ${dim.height}` : undefined }}
+                          >
+                            <img
+                              src={photo.image}
+                              alt={`Sharon Verma — ${photo.type}`}
+                              className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-end p-3 sm:p-4 z-10">
+                              <div>
+                                <span className="inline-block px-2 py-0.5 text-[10px] sm:text-xs font-semibold uppercase tracking-wider rounded-full bg-amber-400/20 text-amber-200 border border-amber-400/30 mb-1">
+                                  {photo.type === "portrait" ? "Portrait" : photo.type === "show" ? "Live Show" : "Behind the Scenes"}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="absolute inset-0 rounded-xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200 shadow-[inset_0_0_30px_rgba(251,191,36,0.08)] z-10" />
+                          </button>
+                        );
+                      })}
+                    </div>
+                  ))}
+                </div>
+              </>
             ) : (
               <motion.div
                 initial={{ opacity: 0 }}

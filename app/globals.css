@@ -93,15 +93,8 @@
   }
 
   /* GPU-accelerated smooth scroll */
-  * {
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-  }
-
-  /* Preload hint for images */
-  img {
-    content-visibility: auto;
-  }
+  /* Removed blanket backface-visibility:hidden — it creates a GPU layer per element
+     causing memory pressure and scroll jank on image-heavy pages */
 
   /* Better touch targets for mobile */
   button, a {
